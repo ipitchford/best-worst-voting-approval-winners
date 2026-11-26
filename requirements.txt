@@ -1,0 +1,2 @@
+python>=3.10
+sympy==1.14.0  # verify_rational_fpac.py only; the other scripts use the standard library

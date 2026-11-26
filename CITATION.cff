@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it using these metadata."
+type: software
+title: "Recovering approval winners from ranked ballots: best–worst voting and the approval-compatibility questions of Terzopoulou, Lang and Zwicker"
+abstract: "Unrefereed research candidate. Best–worst voting (one point for first place, minus one for last) makes exactly the approval winners win together after at most m - 1 copies of each ballot, for every number m of candidates, and the bound is attained; so Borda is not the only approval-compatible scoring rule. A polynomial-time test decides the property for rational scoring vectors and gives complete lists for four, five and (rational) six candidates. The scalar criterion of Terzopoulou, Lang and Zwicker for one designated winner holds with split ballots for all real scores and with replication for rational scores, and fails with replication for some irrational scores."
+authors:
+  - name: "Anonymous"
+version: "0.1.0"
+date-released: "2026-11-26"
+doi: "10.5281/zenodo.24547593"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24547593"
+    description: "This version"
+  - type: doi
+    value: "10.5281/zenodo.24547592"
+    description: "All versions (concept DOI)"
+repository-code: "https://github.com/ipitchford/best-worst-voting-approval-winners"
+url: "https://evidencepress.org/releases/best-worst-voting-approval-winners/"
+license: CC0-1.0
+keywords:
+  - approval voting
+  - positional scoring rules
+  - best-worst voting
+  - Borda count
+  - approval compatibility
+  - computational social choice
+preferred-citation:
+  type: article
+  title: "Recovering approval winners from ranked ballots: best–worst voting and the approval-compatibility questions of Terzopoulou, Lang and Zwicker"
+  authors:
+    - name: "Anonymous"
+  year: 2026
+  doi: "10.5281/zenodo.24547593"
+  publisher:
+    name: "Zenodo"
+  notes: "Version 0.1.0; unrefereed"

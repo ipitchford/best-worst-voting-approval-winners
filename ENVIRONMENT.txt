@@ -1,0 +1,14 @@
+Release replay environment (26 November 2026, macOS arm64 host)
+Interpreter (printed inside the run, not assumed):
+- `uv run --python 3.12 --with sympy==1.14.0` resolved to CPython 3.12.11 with SymPy 1.14.0 (verify_rational_fpac.py).
+- `uv run --python 3.12` without packages (verify_endpoints.py, check_best_worst.py) resolved to CPython 3.14.7
+  through a local shim; recorded as seen. Both scripts use only the standard library; the lead's replay of
+  24 November 2026 also used 3.14.7 for them, and the paper states they were run with Python 3.12 and 3.14.
+Packages: SymPy 1.14.0 for verify_rational_fpac.py only (requirements.txt). No compiler.
+Working directory: the package root. Flags: python3 -I -B -O for all three scripts.
+Run time on the release host: under ten seconds in total.
+GitHub CI: ubuntu-latest, actions/setup-python 3.12, SymPy 1.14.0. One job: manifest, the three scripts under -O,
+exact comparison of the printed result lines with the expected lines, a negative control (one changed certificate
+entry must fail under -O), working tree unchanged.
+Comparison policy: exact. All arithmetic is integer or rational, so every printed line must match exactly; no
+tolerance is used and no interpreter-version field is printed by the scripts.

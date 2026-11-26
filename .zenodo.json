@@ -1,0 +1,58 @@
+{
+ "title": "Recovering approval winners from ranked ballots: best–worst voting and the approval-compatibility questions of Terzopoulou, Lang and Zwicker",
+ "upload_type": "publication",
+ "publication_type": "preprint",
+ "description": "<p><strong>Unrefereed research candidate.</strong> Under approval voting each voter ticks every acceptable candidate and the most ticks win. Under a positional scoring rule (Borda is the best-known) voters rank the candidates and positions earn points. A sincere voter switching from ticks to a ranking puts every approved candidate above every other one, but the order inside the two groups is free. Terzopoulou, Lang and Zwicker (Social Choice and Welfare, 2026) asked which scoring rules can always reproduce the approval winners for some such sincere rankings, when every ballot may be counted a fixed number of times. They showed Borda can, that no other rule can with three candidates, and asked whether Borda is unique for more candidates.</p><p><strong>Results.</strong> (1) Best–worst voting (one point for first place, minus one for last) makes exactly the approval winners win together, for every number m of candidates, with at most m &minus; 1 copies of each ballot, and one voter can force that many. So Borda is not unique for any m &ge; 4, and the rule (2,1,1,0), which the original authors believed to work, does. (2) A polynomial-time test of the property for any rational scoring vector, a reflection-symmetry lemma, and complete lists of the rules with the property for four and five candidates and of the rational rules for six candidates (four: completes their necessary condition; five and six: new). (3) Their conjectured scalar criterion for electing one designated approval winner holds for every real scoring vector when a ballot may be split between rankings, and for every rational scoring vector under replication. (4) With whole copies and irrational scores it can fail: in an eight-candidate, five-ballot election the designated candidate can win exactly when a parameter of the rule is rational, and the copies needed can be arbitrarily many.</p><p><strong>Limits.</strong> The results concern the existence of sincere rankings, not what voters would submit, and hold for every electorate (worst case). Irrational six-candidate rules and a general formula for all numbers of candidates remain open.</p><p><strong>Contents.</strong> The paper (LaTeX source and PDF), three Python scripts (exact rational arithmetic: certificate checks for four, five and six candidates and the eight-candidate witness; the signed vertex cases with SymPy; exhaustive best–worst replication counts for three to five candidates), the certificate file, the bibliography, a machine-readable index, a research-gate record, a review summary, a replay receipt and SHA-256 sums.</p><p><strong>Assurance.</strong> Written proofs with exact computational checks. Internal AI-assisted review only: a combined Claude review panel, a revision round, a verification re-review, a proof audit and clean replays with a negative control. No Astra/Codex review took place. This is not peer review, independent reproduction or formal verification. Creator: Anonymous. Text CC0-1.0; code MIT.</p>",
+ "creators": [
+  {
+   "name": "Anonymous"
+  }
+ ],
+ "access_right": "open",
+ "license": "cc-zero",
+ "version": "0.1.0",
+ "publication_date": "2026-11-26",
+ "keywords": [
+  "approval voting",
+  "positional scoring rules",
+  "best-worst voting",
+  "Borda count",
+  "approval compatibility",
+  "computational social choice",
+  "possible winner",
+  "submodular optimisation"
+ ],
+ "notes": "Code (*.py and the CI workflow) is MIT; prose, manuscript, certificate data and records are CC0-1.0.",
+ "related_identifiers": [
+  {
+   "identifier": "https://github.com/ipitchford/best-worst-voting-approval-winners/tree/v0.1.0",
+   "relation": "isSupplementTo",
+   "scheme": "url"
+  },
+  {
+   "identifier": "https://evidencepress.org/releases/best-worst-voting-approval-winners/",
+   "relation": "isDocumentedBy",
+   "scheme": "url"
+  },
+  {
+   "identifier": "10.1007/s00355-025-01588-9",
+   "relation": "references",
+   "scheme": "doi"
+  },
+  {
+   "identifier": "10.1016/j.ipl.2011.11.016",
+   "relation": "references",
+   "scheme": "doi"
+  },
+  {
+   "identifier": "10.1007/3-540-36478-1_2",
+   "relation": "references",
+   "scheme": "doi"
+  },
+  {
+   "identifier": "arXiv:1802.09001",
+   "relation": "references",
+   "scheme": "arxiv"
+  }
+ ]
+}

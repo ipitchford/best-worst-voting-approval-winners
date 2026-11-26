@@ -1,0 +1,64 @@
+# SPDX-License-Identifier: MIT
+name: Replay
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+jobs:
+  replay:
+    name: Manifest; three scripts under python -O; exact comparison; negative control
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check MANIFEST.sha256
+        run: sha256sum -c MANIFEST.sha256
+      - name: Install pinned packages
+        run: python3 -m pip install sympy==1.14.0
+      - name: Run the scripts in a fresh copy and compare exactly
+        run: |
+          D="$RUNNER_TEMP/pkg"; mkdir -p "$D"; cp -R code data "$D/"; cd "$D"
+          python3 -I -c 'import sys, sympy; print(sys.version, sympy.__version__)'
+          set -e
+          python3 -I -B -O code/verify_endpoints.py > verify_endpoints.out
+          python3 -I -B -O code/verify_rational_fpac.py > verify_rational_fpac.out
+          python3 -I -B -O code/check_best_worst.py > check_best_worst.out
+          cat > verify_endpoints.exp <<'X'
+          certificate file sha256 06af0224c550e93d3be95437f35994cfc23c9582197be4bdc8be99fa92bc4070
+          4 candidates, scores (6,5,1,0): 3,600 exact ballot inequalities verified
+          5 candidates, scores (8,7,4,1,0): 30,752 exact ballot inequalities verified
+          6 candidates, scores (5,4,4,1,1,0): 254,016 exact ballot inequalities verified
+          6 candidates, scores (10,9,5,5,1,0): 254,016 exact ballot inequalities verified
+          6 candidates, scores (40,36,31,9,4,0): 254,016 exact ballot inequalities verified
+          Six-candidate facet witnesses: functionals (-18, -12, 6) and (-24, 6, 3) on (g1, g2, g3) verified
+          Eight candidates: both score budgets attained and auxiliary scores 30 versus at least 32 verified
+          ALL CHECKS PASSED
+          X
+          cat > verify_rational_fpac.exp <<'X'
+          Verified all 18 signed vertex cases for r = q.
+          Verified all 18 signed vertex cases for r > q.
+          ALL CHECKS PASSED
+          X
+          cat > check_best_worst.exp <<'X'
+          3 candidates, 44 profiles by smallest replication factor: {1: 39, 2: 5}
+          4 candidates, 152 profiles by smallest replication factor: {1: 116, 2: 28, 3: 8}
+          5 candidates, 560 profiles by smallest replication factor: {1: 393, 2: 122, 3: 40, 4: 5}
+          ALL CHECKS PASSED
+          X
+          sed -i 's/^          //' *.exp
+          for s in verify_endpoints verify_rational_fpac check_best_worst; do diff "$s.exp" "$s.out"; done
+          echo "outputs identical to the expected lines"
+      - name: Negative control (a changed certificate entry must fail under python -O)
+        run: |
+          N="$RUNNER_TEMP/neg1"; mkdir -p "$N"; cp -R code data "$N/"; cd "$N"
+          python3 -I -c 'import json; p="data/endpoint_certificates.json"; d=json.load(open(p)); assert d["6,5,1,0"]["4,1,3,0"][1] == "12"; d["6,5,1,0"]["4,1,3,0"][1] = "11"; open(p, "w").write(json.dumps(d, indent=1))'
+          if python3 -I -B -O code/verify_endpoints.py > out.txt 2>&1; then echo "changed certificate not detected"; exit 1; fi
+          grep -q "CHECK FAILED: class sum for 4,1,3,0" out.txt
+          echo "negative control detected"
+      - name: Working tree unchanged
+        run: test -z "$(git status --porcelain)"

@@ -1,0 +1,274 @@
+{
+ "schemaVersion": "1.0",
+ "provenance": "Compiled 26 November 2026 for 0.1.0 from the dated searches of the lead and the internal AI-assisted review (24 November 2026), the source retrieval record, the corpus overlap check, refs.bib, REVIEW_SUMMARY.md and the paper's own positioning (Sections 1 and 9). It records scrutiny performed, not historical priority.",
+ "contributionMap": [
+  {
+   "claim": "Best-worst voting makes exactly the approval winners win after at most m - 1 copies of each ballot, for every m >= 3; the bound is attained",
+   "unit": "statement",
+   "paperLocation": "Theorem 5; Example 6",
+   "searches": [
+    {
+     "date": "2026-11-24",
+     "corpus": "web and arXiv searches by the lead and the internal review (Semantic Scholar where available); the citing literature of Terzopoulou, Lang and Zwicker; the Evidence Press corpus (site papers/ and the batch corpus list)",
+     "query": "\"approval compatible\" / \"approval compatibility\" with scoring rules; \"best-worst voting\" with approval; \"possible winner\" with partitioned or two-layer preferences; FUPAC, FPAC"
+    },
+    {
+     "date": "2026-11-24",
+     "corpus": "the cited works, obtained and read: Terzopoulou-Lang-Zwicker (2026, whole article, author copy), Kenig (arXiv:1802.09001, full), Baumeister-Rothe (arXiv:1108.4436v2, full), Schrijver (2003) chapter 44",
+     "query": "TLZ Definitions 2 and 5, Lemmas 2-3, Theorem 3 and remark, notes 7, 9 and 11, Sections 2.1, 2.2 and 4; Kenig Theorem 5 and Section 4.2; Baumeister-Rothe abstract and main theorem; Schrijver Sections 44.1-44.2"
+    }
+   ],
+   "closestPriorWork": "Terzopoulou-Lang-Zwicker (2026): Borda has the property; (2,1,1,0) believed to work (note 11)",
+   "verdict": "new-in-bounded-search",
+   "verdictNote": "answers their uniqueness question; their belief about (2,1,1,0) confirmed"
+  },
+  {
+   "claim": "Best-worst voting has cautious approval compatibility",
+   "unit": "statement",
+   "paperLocation": "Corollary 7",
+   "searches": [
+    {
+     "date": "2026-11-24",
+     "corpus": "web and arXiv searches by the lead and the internal review (Semantic Scholar where available); the citing literature of Terzopoulou, Lang and Zwicker; the Evidence Press corpus (site papers/ and the batch corpus list)",
+     "query": "\"approval compatible\" / \"approval compatibility\" with scoring rules; \"best-worst voting\" with approval; \"possible winner\" with partitioned or two-layer preferences; FUPAC, FPAC"
+    },
+    {
+     "date": "2026-11-24",
+     "corpus": "the cited works, obtained and read: Terzopoulou-Lang-Zwicker (2026, whole article, author copy), Kenig (arXiv:1802.09001, full), Baumeister-Rothe (arXiv:1108.4436v2, full), Schrijver (2003) chapter 44",
+     "query": "TLZ Definitions 2 and 5, Lemmas 2-3, Theorem 3 and remark, notes 7, 9 and 11, Sections 2.1, 2.2 and 4; Kenig Theorem 5 and Section 4.2; Baumeister-Rothe abstract and main theorem; Schrijver Sections 44.1-44.2"
+    }
+   ],
+   "closestPriorWork": "Terzopoulou-Lang-Zwicker: plurality, Borda and others have CAC",
+   "verdict": "new-in-bounded-search",
+   "verdictNote": "not found"
+  },
+  {
+   "claim": "Polynomial-time recognition of FUPAC for rational scoring vectors; reflection symmetry of every FUPAC rule",
+   "unit": "statement",
+   "paperLocation": "Theorem 8; Lemma 9",
+   "searches": [
+    {
+     "date": "2026-11-24",
+     "corpus": "web and arXiv searches by the lead and the internal review (Semantic Scholar where available); the citing literature of Terzopoulou, Lang and Zwicker; the Evidence Press corpus (site papers/ and the batch corpus list)",
+     "query": "\"approval compatible\" / \"approval compatibility\" with scoring rules; \"best-worst voting\" with approval; \"possible winner\" with partitioned or two-layer preferences; FUPAC, FPAC"
+    },
+    {
+     "date": "2026-11-24",
+     "corpus": "the cited works, obtained and read: Terzopoulou-Lang-Zwicker (2026, whole article, author copy), Kenig (arXiv:1802.09001, full), Baumeister-Rothe (arXiv:1108.4436v2, full), Schrijver (2003) chapter 44",
+     "query": "TLZ Definitions 2 and 5, Lemmas 2-3, Theorem 3 and remark, notes 7, 9 and 11, Sections 2.1, 2.2 and 4; Kenig Theorem 5 and Section 4.2; Baumeister-Rothe abstract and main theorem; Schrijver Sections 44.1-44.2"
+    }
+   ],
+   "closestPriorWork": "Terzopoulou-Lang-Zwicker Lemma 3 (special case of the symmetry)",
+   "verdict": "partially-known-cited",
+   "verdictNote": "their Lemma 3 is contained and credited; the general lemma and the test not found"
+  },
+  {
+   "claim": "Complete classification of FUPAC rules for four and five candidates and of rational rules for six",
+   "unit": "statement",
+   "paperLocation": "Theorems 10 and 12",
+   "searches": [
+    {
+     "date": "2026-11-24",
+     "corpus": "web and arXiv searches by the lead and the internal review (Semantic Scholar where available); the citing literature of Terzopoulou, Lang and Zwicker; the Evidence Press corpus (site papers/ and the batch corpus list)",
+     "query": "\"approval compatible\" / \"approval compatibility\" with scoring rules; \"best-worst voting\" with approval; \"possible winner\" with partitioned or two-layer preferences; FUPAC, FPAC"
+    },
+    {
+     "date": "2026-11-24",
+     "corpus": "the cited works, obtained and read: Terzopoulou-Lang-Zwicker (2026, whole article, author copy), Kenig (arXiv:1802.09001, full), Baumeister-Rothe (arXiv:1108.4436v2, full), Schrijver (2003) chapter 44",
+     "query": "TLZ Definitions 2 and 5, Lemmas 2-3, Theorem 3 and remark, notes 7, 9 and 11, Sections 2.1, 2.2 and 4; Kenig Theorem 5 and Section 4.2; Baumeister-Rothe abstract and main theorem; Schrijver Sections 44.1-44.2"
+    }
+   ],
+   "closestPriorWork": "Terzopoulou-Lang-Zwicker note 11 (four-candidate necessary form)",
+   "verdict": "partially-known-cited",
+   "verdictNote": "four-candidate necessity credited to them; sufficiency and the five- and six-candidate lists not found"
+  },
+  {
+   "claim": "The TLZ scalar inequalities are sufficient for split FPAC (all real scores) and for FPAC with replication (rational scores)",
+   "unit": "statement",
+   "paperLocation": "Theorem 13; Corollary 14",
+   "searches": [
+    {
+     "date": "2026-11-24",
+     "corpus": "web and arXiv searches by the lead and the internal review (Semantic Scholar where available); the citing literature of Terzopoulou, Lang and Zwicker; the Evidence Press corpus (site papers/ and the batch corpus list)",
+     "query": "\"approval compatible\" / \"approval compatibility\" with scoring rules; \"best-worst voting\" with approval; \"possible winner\" with partitioned or two-layer preferences; FUPAC, FPAC"
+    },
+    {
+     "date": "2026-11-24",
+     "corpus": "the cited works, obtained and read: Terzopoulou-Lang-Zwicker (2026, whole article, author copy), Kenig (arXiv:1802.09001, full), Baumeister-Rothe (arXiv:1108.4436v2, full), Schrijver (2003) chapter 44",
+     "query": "TLZ Definitions 2 and 5, Lemmas 2-3, Theorem 3 and remark, notes 7, 9 and 11, Sections 2.1, 2.2 and 4; Kenig Theorem 5 and Section 4.2; Baumeister-Rothe abstract and main theorem; Schrijver Sections 44.1-44.2"
+    }
+   ],
+   "closestPriorWork": "Terzopoulou-Lang-Zwicker Lemma 2 and note 9 (necessity, conjectured sufficiency)",
+   "verdict": "new-in-bounded-search",
+   "verdictNote": "proves their conjecture in the split sense"
+  },
+  {
+   "claim": "For irrational scores whole-copy replication differs from splitting: an eight-candidate family where the designated candidate wins after replication iff a parameter is rational; unbounded replication",
+   "unit": "statement",
+   "paperLocation": "Theorem 15; Corollary 16",
+   "searches": [
+    {
+     "date": "2026-11-24",
+     "corpus": "web and arXiv searches by the lead and the internal review (Semantic Scholar where available); the citing literature of Terzopoulou, Lang and Zwicker; the Evidence Press corpus (site papers/ and the batch corpus list)",
+     "query": "\"approval compatible\" / \"approval compatibility\" with scoring rules; \"best-worst voting\" with approval; \"possible winner\" with partitioned or two-layer preferences; FUPAC, FPAC"
+    },
+    {
+     "date": "2026-11-24",
+     "corpus": "the cited works, obtained and read: Terzopoulou-Lang-Zwicker (2026, whole article, author copy), Kenig (arXiv:1802.09001, full), Baumeister-Rothe (arXiv:1108.4436v2, full), Schrijver (2003) chapter 44",
+     "query": "TLZ Definitions 2 and 5, Lemmas 2-3, Theorem 3 and remark, notes 7, 9 and 11, Sections 2.1, 2.2 and 4; Kenig Theorem 5 and Section 4.2; Baumeister-Rothe abstract and main theorem; Schrijver Sections 44.1-44.2"
+    }
+   ],
+   "closestPriorWork": "none found",
+   "verdict": "new-in-bounded-search",
+   "verdictNote": "not found in the searched sources"
+  },
+  {
+   "claim": "Method: decide whether a set can tie at the top by testing whether a box meets a sum of base polytopes (sorting / Edmonds greedy), reduce best-worst inequalities to counting ballots equal to or crossing a set, and recover rankings from a circulation",
+   "unit": "method",
+   "paperLocation": "Sections 3-5",
+   "searches": [
+    {
+     "date": "2026-11-24",
+     "corpus": "web and arXiv searches by the lead and the internal review (Semantic Scholar where available); the citing literature of Terzopoulou, Lang and Zwicker; the Evidence Press corpus (site papers/ and the batch corpus list)",
+     "query": "\"approval compatible\" / \"approval compatibility\" with scoring rules; \"best-worst voting\" with approval; \"possible winner\" with partitioned or two-layer preferences; FUPAC, FPAC"
+    },
+    {
+     "date": "2026-11-24",
+     "corpus": "the cited works, obtained and read: Terzopoulou-Lang-Zwicker (2026, whole article, author copy), Kenig (arXiv:1802.09001, full), Baumeister-Rothe (arXiv:1108.4436v2, full), Schrijver (2003) chapter 44",
+     "query": "TLZ Definitions 2 and 5, Lemmas 2-3, Theorem 3 and remark, notes 7, 9 and 11, Sections 2.1, 2.2 and 4; Kenig Theorem 5 and Section 4.2; Baumeister-Rothe abstract and main theorem; Schrijver Sections 44.1-44.2"
+    }
+   ],
+   "closestPriorWork": "Edmonds (1970/2003), Schrijver ch. 44 (base polytopes); Kenig (2018, flow algorithm for partitioned preferences)",
+   "verdict": "partially-known-cited",
+   "verdictNote": "tools credited; their combination for approval compatibility not found"
+  }
+ ],
+ "sourcesReadInFull": [
+  {
+   "citation": "Terzopoulou, Z., Lang, J. and Zwicker, W. S. (2026), Approval compatible voting rules, Social Choice and Welfare 66(1), 1-26",
+   "usedFor": "definitions, known results, conjecture and open questions",
+   "readWhat": "whole article (author copy)",
+   "date": "2026-11-24",
+   "evidenceLocator": "https://doi.org/10.1007/s00355-025-01588-9"
+  },
+  {
+   "citation": "Kenig, B. (2018), The complexity of the possible winner problem over partitioned preferences, arXiv:1802.09001",
+   "usedFor": "related work (flow algorithm)",
+   "readWhat": "whole paper",
+   "date": "2026-11-24",
+   "evidenceLocator": "https://arxiv.org/abs/1802.09001"
+  },
+  {
+   "citation": "Baumeister, D. and Rothe, J. (2012), Taking the final step to a full dichotomy of the possible winner problem in pure scoring rules, Information Processing Letters 112(5), 186-190",
+   "usedFor": "related work (NP-completeness for (2,1,...,1,0))",
+   "readWhat": "whole paper (arXiv:1108.4436v2)",
+   "date": "2026-11-24",
+   "evidenceLocator": "https://doi.org/10.1016/j.ipl.2011.11.016"
+  },
+  {
+   "citation": "Schrijver, A. (2003), Combinatorial Optimization: Polyhedra and Efficiency, Vol. B, Chapter 44, Springer",
+   "usedFor": "base polytope and greedy algorithm (also the attribution to Edmonds)",
+   "readWhat": "chapter 44",
+   "date": "2026-11-24",
+   "evidenceLocator": "ISBN 3-540-44389-4"
+  }
+ ],
+ "limitationTriage": [
+  {
+   "limitation": "Irrational six-candidate rules",
+   "closingQuestion": "Which irrational rules inside the six-candidate region have FUPAC?",
+   "triedOrSearched": "attempted in the revision round; the two-parameter arithmetic was not settled",
+   "estimatedCost": "new research",
+   "cheap": false,
+   "decision": "OPEN",
+   "reasonOpen": "Section 9 (ii)",
+   "whyNotClosedNow": "open problem"
+  },
+  {
+   "limitation": "No description for every number of candidates",
+   "closingQuestion": "What is the cone of FUPAC rules for general m?",
+   "triedOrSearched": "floating-point scan at seven candidates only, not claimed",
+   "estimatedCost": "new research",
+   "cheap": false,
+   "decision": "OPEN",
+   "reasonOpen": "Section 9 (i)",
+   "whyNotClosedNow": "open problem"
+  },
+  {
+   "limitation": "Least replication for other FUPAC rules; exact winner sets for the classified rules",
+   "closingQuestion": "How many copies do other rules need, and do they make the winners exactly W?",
+   "triedOrSearched": "not attempted",
+   "estimatedCost": "unknown",
+   "cheap": false,
+   "decision": "OPEN",
+   "reasonOpen": "Section 9 (iii), (iv)",
+   "whyNotClosedNow": "open problems"
+  },
+  {
+   "limitation": "Existence of sincere completions only",
+   "closingQuestion": "What would voters actually submit?",
+   "triedOrSearched": "stated in Section 9; a probabilistic counterpart is suggested by TLZ Section 4",
+   "estimatedCost": "new research",
+   "cheap": false,
+   "decision": "OPEN",
+   "reasonOpen": "scope of the question",
+   "whyNotClosedNow": "outside the paper"
+  },
+  {
+   "limitation": "Scripts used bare assert",
+   "closingQuestion": "Do the checks survive python -O?",
+   "triedOrSearched": "fixed in revision; negative controls exit 1 under -O",
+   "estimatedCost": "hours",
+   "cheap": true,
+   "decision": "CLOSED",
+   "reasonOpen": "",
+   "whyNotClosedNow": ""
+  },
+  {
+   "limitation": "Four-candidate necessity priority",
+   "closingQuestion": "Is the necessary form already known?",
+   "triedOrSearched": "yes: TLZ note 11; credited",
+   "estimatedCost": "hours",
+   "cheap": true,
+   "decision": "CLOSED",
+   "reasonOpen": "",
+   "whyNotClosedNow": ""
+  },
+  {
+   "limitation": "Unchecked context citation (Garcia-Lapresta, Marley and Martinez-Panero 2010)",
+   "closingQuestion": "Does it support the sentence?",
+   "triedOrSearched": "the article itself was not checked in this batch",
+   "estimatedCost": "library access",
+   "cheap": false,
+   "decision": "CLOSED",
+   "reasonOpen": "",
+   "whyNotClosedNow": "citation and its context sentence removed"
+  },
+  {
+   "limitation": "Novelty rests on searches of limited scope",
+   "closingQuestion": "Would further indexes change attribution?",
+   "triedOrSearched": "see searches",
+   "estimatedCost": "library access",
+   "cheap": false,
+   "decision": "OPEN",
+   "reasonOpen": "computational social choice literature is large",
+   "whyNotClosedNow": "recorded here; priority is claimed only within the searches"
+  }
+ ],
+ "extensionScout": {
+  "by": "the internal review and the lead",
+  "date": "2026-11-24",
+  "proposals": [
+   "six-candidate classification",
+   "split versions of the four- and five-candidate results",
+   "irrational six-candidate rules",
+   "general-m description"
+  ],
+  "actions": [
+   "done: Theorem 12",
+   "done: Theorem 10",
+   "not done: open problem (ii)",
+   "not done: float scan at seven candidates only, not claimed"
+  ]
+ }
+}

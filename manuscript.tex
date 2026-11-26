@@ -1,0 +1,396 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm,booktabs,microtype,enumitem,array}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black,citecolor=blue!45!black]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\one}{\mathbf 1}
+\title{Recovering approval winners from ranked ballots:\\[2pt]
+\large best--worst voting and the approval-compatibility questions of Terzopoulou, Lang and Zwicker}
+\author{Anonymous\\[3pt]{\small DOI \href{https://doi.org/10.5281/zenodo.24547593}{10.5281/zenodo.24547593}}}
+\date{November 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Suppose an electorate has cast approval ballots, and each voter then submits a ranking that places the approved candidates above the others. Can a positional scoring rule applied to these rankings reproduce the approval result? Terzopoulou, Lang and Zwicker showed that Borda voting can make all approval co-winners win together once every ballot is replicated, that no other positional rule can do so with three candidates, and asked whether Borda is unique for more candidates. We show that it is not. Best--worst voting, which gives one point for first place and minus one point for last, recovers the approval winner set exactly, for every number $m\ge3$ of candidates, using at most $m-1$ copies of each ballot; one voter can force this many. We give a polynomial-time test of the property for any rational scoring vector and use it to classify the rules with the property for four, five and six candidates (for six candidates, all rational rules). At four candidates this supplies the sufficiency half of a necessary condition found by Terzopoulou, Lang and Zwicker; the five- and six-candidate classifications are new. For the weaker requirement that each approval winner can be elected separately, the same authors proved a family of scalar inequalities necessary and conjectured them sufficient. We prove sufficiency for every real scoring vector when a ballot may be split between rankings, and for every rational scoring vector under ballot replication, which is the device their definition uses for such splitting. For irrational scoring vectors the two readings differ: for a one-parameter family of eight-candidate rules satisfying the inequalities, a five-ballot profile admits a split completion electing the designated candidate for every parameter value, but a finite replication does so exactly when the parameter is rational.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+This section explains the question, what was known, what this paper adds and how the paper is organised.
+
+\paragraph{The question.} Many bodies elect by approval voting: each voter marks the candidates they approve of, and the candidates with the most approvals win. Others use ranked ballots and a positional scoring rule such as Borda, where each position on a ballot is worth a fixed number of points. A natural way to compare the two formats is to ask what a ranking election could look like if the same voters were sincere. A voter who approved a set $A$ of candidates would then rank every member of $A$ above every non-member, but the order inside $A$, and inside its complement, is not determined by the approval ballot. Terzopoulou, Lang and Zwicker \cite{tlz} call such a ranking \emph{compatible} with the approval ballot. They asked which ranking rules can always reproduce the approval outcome for some choice of compatible rankings. If a rule cannot, then switching from approval ballots to rankings under that rule may change who wins even when no voter changes their mind.
+
+\paragraph{What was known.} Terzopoulou, Lang and Zwicker \cite{tlz} introduced a family of such approval-compatibility properties. Two of them concern this paper. \emph{Fractional uniform positive approval compatibility} (FUPAC) asks that all approval co-winners can be made co-winners together after every ballot is copied the same number of times. \emph{Fractional positive approval compatibility} (FPAC) asks only that each approval winner, separately, can be made a winner in this way. The copying is their device for letting a voter's ballot be split between several compatible rankings \cite[Sect.~2.2]{tlz}. They proved that Borda voting has FUPAC and that it is the only positional rule with FUPAC for three candidates \cite[Theorem~3 and the remark after it]{tlz}. For four candidates they stated, without proof in the paper, that any rule with FUPAC must have scores of the shape $(2+t,1+t,1,0)$ up to a positive affine change, with $t$ rational and $0\le t\le4$ \cite[note~11]{tlz}. They asked whether Borda is the only positional rule with FUPAC for more candidates, said they expected the answer to be negative, and said they believed the four-candidate rule $(2,1,1,0)$ has FUPAC, without a proof. For FPAC they proved a family of scalar inequalities on the scoring vector necessary and conjectured that they are sufficient \cite[Lemma~2 and note~9]{tlz}.
+
+\paragraph{What is new.} Table~\ref{tab:results} places the results beside what was known.
+\begin{enumerate}[nosep,leftmargin=*]
+\item \emph{Best--worst voting recovers approval winners exactly} (Theorem~\ref{main}). The scores $(1,0,\ldots,0,-1)$ make all approval winners, and no other candidate, win together after at most $m-1$ copies of each ballot, for every $m\ge3$. The bound $m-1$ is attained. Since $(2,1,1,0)$ is best--worst voting for four candidates after adding one to every score, this confirms the belief recorded in \cite[note~11]{tlz} and answers the uniqueness question: Borda is not unique for any $m\ge4$. Best--worst voting also elects any single approval winner without replication and without electing an approval loser (Corollary~\ref{cac}).
+\item \emph{A recognition algorithm and three classifications} (Theorems~\ref{recognition}, \ref{classification} and~\ref{six}). For a rational scoring vector, FUPAC can be decided in time polynomial in $m$ and the bit size of the scores. Every rule with FUPAC is reflection symmetric (Lemma~\ref{symmetry}). With these tools we classify all rules with FUPAC for four and five candidates, and all rational rules with FUPAC for six candidates. For four candidates the necessary half is due to Terzopoulou, Lang and Zwicker; the sufficient half is new.
+\item \emph{The scalar criterion for one designated winner} (Theorem~\ref{rationalfpac}). The scalar inequalities of \cite[Lemma~2]{tlz} are sufficient for every real scoring vector when ballots may be split in real proportions, and for every rational scoring vector under replication. In the sense in which replication was introduced, this proves the conjecture of \cite[note~9]{tlz}.
+\item \emph{Where replication and splitting differ} (Theorem~\ref{arithmetic}). The definition of FPAC in \cite[Definition~2]{tlz} uses whole copies and allows irrational scores. Under that literal reading the conjecture fails for some irrational scoring vectors: whether the designated candidate can win depends on the arithmetic of the scores, and the number of copies needed can be arbitrarily large even within a bounded family of rules.
+\end{enumerate}
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{>{\raggedright}p{0.30\textwidth}>{\raggedright}p{0.29\textwidth}>{\raggedright\arraybackslash}p{0.33\textwidth}}
+\toprule
+Question & Known from \cite{tlz} & This paper\\
+\midrule
+Which positional rules have FUPAC? & Borda; only Borda when $m=3$; necessary form for $m=4$ & Best--worst, exactly and with sharp replication $m-1$, all $m$; polynomial-time test; complete lists for $m=4,5$ and for rational rules at $m=6$\\
+Does $(2,1,1,0)$ have FUPAC? & Believed, unproved & Yes (it is best--worst)\\
+Are the scalar inequalities sufficient for FPAC? & Necessary; conjectured sufficient & Sufficient with split ballots (all real scores) and with replication (rational scores); not with replication for some irrational scores\\
+Cautious compatibility (CAC) & Plurality, Borda and others & Also best--worst\\
+\bottomrule
+\end{tabular}
+\caption{The results of this paper beside those of Terzopoulou, Lang and Zwicker \cite{tlz}.}\label{tab:results}
+\end{table}
+
+\paragraph{Related work.} Asking whether a candidate can win for some completion of partially specified ballots is the \emph{possible winner} problem of computational social choice. An approval ballot together with compatibility is a partial order with two layers. Baumeister and Rothe \cite{br} proved that the possible winner problem is NP-complete for the rule $(2,1,\ldots,1,0)$, that is, for best--worst voting, when ballots are arbitrary partial orders; this completed an earlier dichotomy for pure scoring rules. Kenig \cite{kenig} showed that it becomes solvable in polynomial time, by a network-flow algorithm, when each ballot is a sequence of unordered layers, which includes approval ballots. The flow construction in our proof of Theorem~\ref{main} is in the same spirit. The difference is in the question asked: an algorithm decides one candidate on one given profile, whereas we prove a statement about every profile at once, for the whole winner set, with every approval loser excluded and with a replication bound that does not depend on the electorate.
+
+\paragraph{Roadmap.} Section~\ref{sec:model} fixes notation and the definitions. Section~\ref{sec:interval} gives the basic tool, a criterion for when a prescribed set of candidates can tie for first place. Section~\ref{sec:bw} proves the best--worst theorem. Section~\ref{sec:recognition} gives the recognition test and the symmetry lemma, and Section~\ref{sec:classification} the classifications for four, five and six candidates. Section~\ref{sec:fpac} treats one designated winner and Section~\ref{sec:arithmetic} the difference between replication and splitting for irrational scores. Section~\ref{sec:discussion} lists open problems and Section~\ref{sec:checks} describes the computational checks.
+
+\section{Model and notation}\label{sec:model}
+This section fixes the notation used throughout and states the compatibility properties.
+
+Let $C$ be a set of $m\ge3$ candidates. A \emph{profile} is a list of $n\ge1$ approval ballots $A\subseteq C$. A ranking (strict order of $C$) is \emph{compatible} with $A$ if the members of $A$ occupy its first $|A|$ positions. For a ballot $A$ with $q=|A|$ we call the positions $1,\ldots,q$ its \emph{approved tier} and the positions $q+1,\ldots,m$ its \emph{disapproved tier}; every compatible ranking orders each tier arbitrarily. The empty ballot and the ballot $C$ permit every ranking. A ballot is \emph{proper} if it is neither empty nor equal to $C$. Write $a_i$ for the number of ballots approving candidate $i$. The \emph{approval winners} are the set $W=\arg\max_i a_i$; every other candidate is an \emph{approval loser}.
+
+A positional scoring rule is given by real scores $v_1\ge v_2\ge\cdots\ge v_m$ with $v_1>v_m$; a candidate in position $p$ of a ranking receives $v_p$ points, and the candidates with the highest total win. A positive affine change $v\mapsto\kappa v+\tau\one$, $\kappa>0$, does not change any winner. Write $\overline v=m^{-1}\sum_p v_p$ for the mean score. \emph{Best--worst voting} is $v=(1,0,\ldots,0,-1)$, equivalently $(2,1,\ldots,1,0)$. \emph{Borda voting} is $v=(m-1,m-2,\ldots,0)$.
+
+For a positive integer $k$, the \emph{$k$-fold replication} of a profile replaces each ballot by $k$ copies, and each copy may receive its own compatible ranking. A \emph{split completion} instead lets each ballot be a probability mixture of its compatible rankings, contributing its expected score vector. A $k$-fold replication is a split completion with weights in $\frac1k\mathbb Z$, so replication is the rational case of splitting.
+
+\begin{definition}[\cite{tlz}, Definitions 2 and 5]\label{def}
+A scoring rule has
+\begin{itemize}[nosep]
+\item \emph{FUPAC} if for every profile some $k$-fold replication has compatible rankings under which every member of $W$ is a winner;
+\item \emph{FPAC} if for every profile and every $y\in W$ some $k$-fold replication, with $k$ and the rankings allowed to depend on $y$, has compatible rankings under which $y$ is a winner;
+\item \emph{CAC} (cautious approval compatibility) if for every profile and every $y\in W$ there are compatible rankings of the original profile, without replication, under which $y$ is a winner and every winner belongs to $W$.
+\end{itemize}
+We say that a rule has \emph{split FUPAC} or \emph{split FPAC} if the same holds with split completions in place of replications.
+\end{definition}
+
+FUPAC lets approval losers tie with the winners; Theorem~\ref{main} achieves more for best--worst voting, namely that the winners are exactly $W$. Notation local to a section is introduced there. In particular, for sets $R,S$ of candidates we write $r=|R|$ and $s=|S|$, and a sum over an empty range is zero.
+
+\section{When can a set of candidates tie for first place?}\label{sec:interval}
+This section gives the tool used for every positive result: an explicit test of whether a prescribed set of candidates can share the highest score in some split completion.
+
+Fix a profile and scores $v$. For each ballot, the expected score vectors of its split completions form a polytope; let $P$ be the set of sums of one point from each ballot's polytope. Thus $P$ is the set of score vectors of all split completions. For $R\subseteq C$ define
+\[
+ L(R)=\min_{x\in P}\sum_{i\in R}x_i,\qquad U(R)=\max_{x\in P}\sum_{i\in R}x_i .
+\]
+These extremes add over ballots. For a single ballot $A$ with $q=|A|$ and $j=|R\cap A|$, denote them by $L_A(R)$ and $U_A(R)$. Placing the members of $R$ in the worst, respectively best, positions available inside each tier gives
+\begin{align*}
+ L_A(R)&=\sum_{p=q-j+1}^{q} v_p+\sum_{p=m-r+j+1}^{m}v_p,\\
+ U_A(R)&=\sum_{p=1}^{j}v_p+\sum_{p=q+1}^{q+r-j}v_p .
+\end{align*}
+In the language of submodular optimisation, $U$ is a sum over ballots and tiers of concave functions of $|R\cap\text{tier}|$, hence submodular, and $P$ is its base polytope $\{x:\ x(R)\le U(R)\text{ for all }R,\ x(C)=U(C)\}$. Linear functions are optimised over such polytopes by sorting, which is Edmonds' greedy method \cite{edmonds}; see \cite[Section~44.2]{schrijver} for a modern account. Lemma~\ref{box} is a box-intersection statement of this classical kind; we include its short proof because the same sorting step is reused in Section~\ref{sec:fpac}.
+
+\begin{lemma}\label{box}
+Let $l_i\le u_i$ be bounds for $i\in C$, where $l_i=-\infty$ is allowed. The box $\{x:\ l\le x\le u\}$ meets $P$ if and only if $L(R)\le\sum_{i\in R}u_i$ for every $R\subseteq C$ and $U(R)\ge\sum_{i\in R}l_i$ for every $R$ that contains no coordinate with $l_i=-\infty$.
+\end{lemma}
+\begin{proof}
+Necessity follows by summing coordinates. For sufficiency, suppose the box and the compact convex set $P$ are disjoint. Strong separation gives a vector $w$ with $\min_{x\in P}w\cdot x>\sup_{x\in\text{box}}w\cdot x$. The right-hand side is finite, so $w_i\ge0$ whenever $l_i=-\infty$. Sort the coordinates of $w$. Its positive part is a nonnegative combination of indicator vectors of upper level sets $\{w\ge\theta\}$, $\theta>0$, and its negative part is minus a nonnegative combination of indicators of lower level sets $\{w\le-\theta\}$, which avoid the coordinates with $l_i=-\infty$. In each ballot, rank candidates with smaller $w$ earlier within each tier. This one completion simultaneously minimises the score of every upper level set and maximises the score of every lower level set. Substituting the bounds in the decomposition gives $\min_{x\in P}w\cdot x\le\sum_{w_i>0}w_iu_i+\sum_{w_i<0}w_il_i\le\sup_{\text{box}}w\cdot x$, a contradiction.
+\end{proof}
+
+\begin{corollary}\label{interval}
+A nonempty set $W'$ of candidates can share the highest score in some split completion if and only if
+\begin{equation}
+  \max_{\varnothing\ne R\subseteq C}\frac{L(R)}{|R|}
+  \ \le\ \min_{\varnothing\ne S\subseteq W'}\frac{U(S)}{|S|}.\label{intervaleq}
+\end{equation}
+If the scores are rational, this is equivalent to sharing the highest score in some $k$-fold replication.
+\end{corollary}
+\begin{proof}
+Apply Lemma~\ref{box} with every upper bound equal to a common value $z$, lower bound $z$ on $W'$ and $-\infty$ elsewhere; the conditions say exactly that $z$ lies between the two sides of \eqref{intervaleq}. With rational scores, the linear system in the ranking probabilities and $z$ has rational data, so when it is feasible it has a rational solution, and a common denominator $k$ of its probabilities gives a $k$-fold replication. Conversely a replication is a split completion.
+\end{proof}
+
+\section{Best--worst voting}\label{sec:bw}
+This section proves that best--worst voting recovers the approval winners exactly, with a sharp bound on the number of copies.
+
+Take $v=(1,0,\ldots,0,-1)$. On a proper ballot $A$, a ranking is determined, as far as scores go, by its first candidate (in $A$) and its last candidate (outside $A$). For $R\subseteq C$ let $N_R$ be the number of ballots equal to $R$ and $I_R$ the number of proper ballots incomparable with $R$ under inclusion. Suppose first that every ballot is proper. Then for every nonempty proper $R$,
+\begin{equation}
+ L(R)=N_R-I_R,\qquad U(R)=-L(C\setminus R),\label{inc}
+\end{equation}
+and $L(\varnothing)=L(C)=0$. Indeed, a ballot equal to $R$ forces a first place inside $R$ and a last place outside, a net $+1$; an incomparable ballot allows first place outside $R$ and last place inside, a net $-1$; if the ballot strictly contains or is strictly contained in $R$ the minimum is $0$. The second identity holds because the total score is zero.
+
+\begin{lemma}\label{omit}
+Suppose every ballot is proper. If $R$ omits an approval winner $y$, then $L(R)\le0$. If moreover $R$ contains a candidate $i$ with $a_i<a_y$, then $L(R)\le-1$.
+\end{lemma}
+\begin{proof}
+For $R=\varnothing$ the minimum is $0$. Otherwise pick $i\in R$, an approval loser if one is present. The ballots containing $y$ but not $i$ outnumber those containing $i$ but not $y$ by $a_y-a_i\ge0$. The former are incomparable with $R$; the latter include every ballot equal to $R$. Hence $N_R\le I_R-(a_y-a_i)$, and \eqref{inc} gives the claim.
+\end{proof}
+
+\begin{theorem}\label{main}
+For every profile on $m\ge3$ candidates there are $k$ with $1\le k\le m-1$ and compatible rankings of the $k$-fold replication under which the best--worst winners are exactly the approval winners. For every $m$ some one-voter profile needs $k=m-1$.
+\end{theorem}
+\begin{proof}
+\emph{Step 1: a fractional target.} Assume first that every ballot is proper. If $W=C$, Lemma~\ref{omit} gives $L(R)\le0$ for all $R$, hence $U(R)=-L(C\setminus R)\ge0$, and Lemma~\ref{box} with all bounds $0$ shows that the zero score vector lies in $P$; Step~2 realises it with $k=1$.
+
+Now let $W\ne C$. Every nonempty $S\subseteq W$ has $U(S)\ge1$, because $C\setminus S$ omits a winner and contains a loser. Choose $S_0\subseteq W$ minimising $U(S)/|S|$, and put $k=|S_0|\le m-1$ and $\beta=U(S_0)\ge1$. We look for a point of $kP$ in which every winner scores exactly $\beta$ and every loser at most $\beta-1$. By Lemma~\ref{box} applied to $kP$ (whose extremes are $kL$ and $kU$), the lower bounds hold because $kU(S)\ge|S|\beta$ for every nonempty $S\subseteq W$, by the choice of $S_0$. The upper bounds require
+\[
+ kL(R)\le |R|\beta-|R\setminus W|\qquad(R\subseteq C).
+\]
+If $L(R)\le0$ this follows from $\beta\ge1$. Otherwise Lemma~\ref{omit} gives $W\subseteq R\subsetneq C$. Then $R$ and $C\setminus S_0$ are incomparable, since $R\supseteq S_0$ and $C\setminus R$ is a nonempty subset of $C\setminus S_0$. So every ballot equal to $C\setminus S_0$ is incomparable with $R$ and every ballot equal to $R$ is incomparable with $C\setminus S_0$, and \eqref{inc} yields $L(R)\le-L(C\setminus S_0)=U(S_0)=\beta$. Hence $|R|\beta-kL(R)\ge(|R|-k)\beta\ge|R|-k\ge|R\setminus W|$, using $k\le|W|$.
+
+\emph{Step 2: whole rankings.} Build a network with a root, a node for each candidate, and an input and an output node for each original ballot. Each ballot has an arc from its input to its output carrying exactly $k$ units; arcs of capacity $k$ go from each candidate outside the ballot to its input and from its output to each candidate in the ballot; and each candidate has an arc to the root whose flow must lie in that candidate's required score interval (with $-kn$ in place of $-\infty$). A unit leaving a ballot's output towards candidate $i$ records a first place for $i$; a unit entering its input from candidate $i$ records a last place for $i$. By conservation, the flow on a candidate's arc to the root equals its first places minus its last places, which is its best--worst score; the net flow into the root is zero because the total score is zero. Points of $kP$ are exactly the fractional flows of this network, so Step~1 provides a feasible fractional circulation. All bounds are integers, so an integral circulation also exists (shift the lower bounds and apply the integral max-flow theorem). At each ballot, pair the $k$ units entering its input with the $k$ units leaving its output in any order; each pair names a last candidate outside the ballot and a first candidate inside it, which extend to a compatible ranking.
+
+\emph{Step 3: empty and universal ballots.} Removing these ballots does not change any difference of approval counts, so Steps~1--2 apply to the rest. For $k\ge2$ each removed ballot can be given $k$ rankings with net score zero for every candidate: write $k$ as a sum of twos and threes and, for each two (three), use rankings whose (first, last) pairs are $(x,y),(y,x)$ (respectively $(x,y),(y,z),(z,x)$) for distinct candidates, which exist since $m\ge3$. If Step~2 used $k=1$ and such ballots occur, duplicate its rankings to obtain $k=2\le m-1$; if every ballot was removed, $W=C$ and $k=2$ works.
+
+\emph{Step 4: sharpness.} Let a single voter approve $m-1$ candidates. The excluded candidate is last on every copy, so it scores $-k$ and is a loser, as required. The $k$ first places must be shared equally among the $m-1$ winners, so $m-1$ divides $k$. Giving one copy to each approved candidate as first choice attains $k=m-1$.
+\end{proof}
+
+\begin{example}
+With three candidates $x,y,z$ and one ballot $\{x,y\}$, the approval winners are $x$ and $y$. One copy gives scores $(1,0,-1)$ or $(0,1,-1)$, so one winner only. Two copies ranked $xyz$ and $yxz$ give $(1,1,-2)$: both approval winners win and $z$ loses. Exhaustive enumeration of all one- and two-voter profiles for $m=3,4,5$ (Section~\ref{sec:checks}) finds that the largest required replication is exactly $m-1$.
+\end{example}
+
+\begin{corollary}\label{cac}
+For every profile and every approval winner $w$ there are compatible rankings of the original profile, without replication, under which $w$ is a best--worst winner and every winner is an approval winner. Thus best--worst voting has CAC.
+\end{corollary}
+\begin{proof}
+Remove empty and universal ballots. If the rest is empty, rank $w$ first everywhere. If $W=C$ for the rest, use the zero score vector of Theorem~\ref{main} with $k=1$. Otherwise put $\beta=U(\{w\})\ge1$, require $w$ to score exactly $\beta$, the other winners at most $\beta$ and every loser at most $\beta-1$; only $w$ has a finite lower bound. If $L(R)>0$ then $W\subseteq R\subsetneq C$ by Lemma~\ref{omit}, and $R$ is incomparable with $C\setminus\{w\}$, so $L(R)\le\beta$ and $|R|\beta-L(R)\ge|R|-1\ge|R\setminus W|$; if $L(R)\le0$ the bound is immediate. Lemma~\ref{box} and the integral circulation of Step~2 with $k=1$ give one ranking per ballot. Finally rank $w$ first on each restored ballot; this raises $w$ and does not raise anyone else.
+\end{proof}
+
+\section{Recognising FUPAC and a symmetry lemma}\label{sec:recognition}
+This section turns Corollary~\ref{interval} into a finite test of FUPAC for any rational scoring vector and proves that every rule with FUPAC is reflection symmetric.
+
+By Corollary~\ref{interval}, a rational rule has FUPAC if and only if, for every profile, every nonempty $R\subseteq C$ and every nonempty $S\subseteq W$,
+\begin{equation}
+ \Phi_{R,S}=\sum_{A}\bigl(sL_A(R)-rU_A(S)\bigr)\le0 .\label{test}
+\end{equation}
+For given sizes put $x=|R\cap S|$. The four classes $R\cap S$, $R\setminus S$, $S\setminus R$ and $C\setminus(R\cup S)$ have sizes $h=(x,r-x,s-x,m-r-s+x)$. A ballot $A$ meets them in counts $d=(d_1,d_2,d_3,d_4)$ with $0\le d_j\le h_j$, and its term $\Delta(d)=sL_A(R)-rU_A(S)$ depends only on $d$.
+
+\begin{theorem}\label{recognition}
+For rational $v$, FUPAC holds if and only if the following linear programme has optimum at most $0$ for every feasible triple $(r,s,x)$: maximise $\sum_dp_d\Delta(d)$ over $p_d\ge0$ with $\sum_dp_d=1$, subject to the constraint that the class averages $\rho_j=\sum_dp_dd_j/h_j$ (for nonempty classes) are equal on the two classes inside $S$ and no larger on the other two. These $O(m^3)$ programmes have at most $(m+1)^4$ variables and a constant number of other constraints, so the test runs in time polynomial in $m$ and the bit size of $v$. When a programme has positive optimum, a profile using at most four ballot types, up to permutations inside the four classes, violates FUPAC.
+\end{theorem}
+\begin{proof}
+Permuting candidates inside each class leaves \eqref{test} unchanged. Averaging a profile over all such permutations therefore preserves \eqref{test} and the condition that every member of $S$ has the maximum approval count, and gives every candidate of class $j$ the approval fraction $\rho_j$. The programme's constraints say exactly that members of $S$ have maximal approval. Conversely, rational frequencies $p_d$ give a finite profile by spreading each $p_d$ evenly over the ballots of type $d$ and clearing denominators. The data are rational, so an optimum occurs at a rational vertex, which has at most four positive coordinates because there are at most four constraints besides nonnegativity. Rational linear programming gives the complexity bound.
+\end{proof}
+
+Each $\Delta(d)$ is a sum of coordinates of $v$ at fixed positions, so \eqref{test} is linear in $v$. Hence the real vectors with split FUPAC are closed under nonnegative combinations, and so are the rational vectors with FUPAC under nonnegative rational combinations: rational mixtures of Borda and best--worst scores already give a one-parameter family of rules with FUPAC for every $m\ge4$. (Irrational mixtures need not have FUPAC; see Theorem~\ref{classification}.) A rational $v$ passes the test of Theorem~\ref{recognition} exactly when it has split FUPAC, and the same programmes decide split FUPAC for real $v$. By linear programming duality (the programme is feasible, since the empty ballot type satisfies all its constraints, and bounded), a vector $v$ passes the test for $(r,s,x)$ if and only if there are weights $\alpha_1,\ldots,\alpha_4$ with $\sum_jh_j\alpha_j=0$, $\alpha_2,\alpha_4\ge0$ (weights of empty classes play no role) and
+\begin{equation}
+  sL_A(R)-rU_A(S)\le\sum_{j=1}^4\alpha_j\,|A\cap\text{class }j|
+  \quad\text{for every ballot }A.\label{cert}
+\end{equation}
+Summing \eqref{cert} over a profile gives \eqref{test}, because the right-hand side sums to
+\[
+ \sum_j\alpha_j\sum_{i\in\text{class }j}a_i\ \le\ \Bigl(\max_ia_i\Bigr)\sum_jh_j\alpha_j=0,
+\]
+since every member of the two classes inside $S$ has the maximum approval count and $\alpha_2,\alpha_4\ge0$. A family of weights $\alpha$, one for each triple, is therefore a checkable certificate of FUPAC.
+
+\begin{lemma}\label{symmetry}
+If $v$ has split FUPAC, then $v_p+v_{m+1-p}=2\overline v$ for every $p$; that is, the gaps $g_p=v_p-v_{p+1}$ satisfy $g_p=g_{m-p}$.
+\end{lemma}
+\begin{proof}
+Take two complementary ballots $A$ and $C\setminus A$ with $|A|=q$, $1\le q\le m-1$. Every candidate has one approval, so all must tie. Whatever rankings are used, the $q$ members of $A$ receive together the first $q$ scores on the first ballot and the last $q$ scores on the second. A tie requires this to equal $2q\overline v$, so $\sum_{p\le q}v_p+\sum_{p>m-q}v_p=2q\overline v$ for all $q$. Subtracting consecutive values of $q$ gives the claim.
+\end{proof}
+
+Lemma~\ref{symmetry} contains the necessary condition of \cite[Lemma~3]{tlz}, which follows from its case $p=1$.
+
+\section{Classifications for four, five and six candidates}\label{sec:classification}
+This section lists every rule with FUPAC for $m=4,5,6$. By Lemma~\ref{symmetry} and a positive affine change we may describe a rule by its gaps $g_p=v_p-v_{p+1}$, $p=1,\ldots,m-1$, with $v_m=0$ and $g_p=g_{m-p}$. Sufficiency is proved by certificates \eqref{cert} at the corners of each family, which a script checks for every labelled ballot (Section~\ref{sec:checks}), together with the closure of FUPAC under nonnegative combinations.
+
+\begin{theorem}\label{classification}
+Up to positive affine change, the rules with FUPAC are exactly
+\[
+\begin{array}{ll}
+m=4: &(2+t,1+t,1,0),\quad t\in\mathbb Q,\ 0\le t\le4,\\
+m=5: &(2+2t,1+2t,1+t,1,0),\quad t\in\mathbb Q,\ 0\le t\le3.
+\end{array}
+\]
+The rules with split FUPAC are the same families with real $t$ in the same intervals. For $m=4$ the necessity of this form, including rationality of $t$ and $t\le4$, was found by Terzopoulou, Lang and Zwicker \cite[note~11]{tlz}; we include a proof for completeness.
+\end{theorem}
+\begin{proof}
+\emph{Shape.} Lemma~\ref{symmetry} gives gaps $(g_1,g_2,g_1)$ for $m=4$ and $(g_1,g_2,g_2,g_1)$ for $m=5$. If $g_1>0$, normalising $g_1=1$ and writing $g_2=t\ge0$ gives the stated forms.
+
+\emph{Upper bounds on $t$.} For $m=4$ take the ballots $\{y\},\{y\},\{a,b\},\{b,c\},\{c,a\}$; everyone has two approvals, so all must tie at the mean. Candidate $y$ can score at most $2v_1+3v_3=2(t+2)+3$ per copy of the profile, while the mean is $5\overline v=5(1+t/2)$, so $t\le4$. For $m=5$ take three ballots $\{y\}$ and the four three-element subsets of the other four candidates; everyone has three approvals. Now $y$ can score at most $3v_1+4v_4=3(2+2t)+4$ per copy against the mean $7\overline v=7(1+t)$, so $t\le3$.
+
+\emph{Rationality and the end gap.} Write $v=v^{(0)}+t\delta$ with $\delta=(1,1,0,0)$ or $(2,2,1,0,0)$ and integral $v^{(0)}$. If $t$ is irrational, a tie between totals of the form $u+tu'$ with integers $u,u'$ forces both parts to tie, so all candidates would tie under the integer weights $\delta$ on a replication of the same profile. Under $\delta$, however, $y$ receives at most $2k$ (respectively $6k$) on $k$ copies, below the required mean $5k/2$ (respectively $7k$). The same profiles exclude $g_1=0$: then $v$ is a positive multiple of $\delta$ up to translation, and the same count applies. The rationality argument uses whole copies and does not apply to split completions; the bounds on $t$ and the exclusion of $g_1=0$ use only the linear tie condition and therefore hold for split FUPAC as well.
+
+\emph{Sufficiency.} The rules with $t=0$ are best--worst voting, which has FUPAC by Theorem~\ref{main}. For the endpoints $(6,5,1,0)$ and $(8,7,4,1,0)$ the supplementary file gives weights $\alpha$ for every triple $(r,s,x)$ (zero where omitted) such that \eqref{cert} holds for every labelled ballot: $3{,}600$ and $30{,}752$ inequalities respectively, all checked in exact arithmetic. The rule with parameter $t$ is a nonnegative combination of the two endpoint rules, so it passes every test \eqref{test}; for rational $t$, Corollary~\ref{interval} converts this into a finite replication, and for real $t$ it gives split FUPAC.
+\end{proof}
+
+For example, with $m=4$, $R=\{y\}$ and $S=C\setminus\{y\}$, the certificate for $(6,5,1,0)$ uses $\alpha=(0,12,-4,0)$. A ballot approving $y$ and one member of $S$ has $L_A(R)=5$ and $U_A(S)=7$, so \eqref{cert} reads $8\le12-4$. A ballot approving exactly $S$ has $L_A(R)=0$ and $U_A(S)=12$, giving $-12\le-12$. These two ballot types are the complements of the ballots in the four-candidate witness profile above; taking complements of approval sets corresponds to reversing the order of the scores.
+
+\begin{remark}
+Terzopoulou, Lang and Zwicker \cite[note~7]{tlz} observe that $(6,5,1,0)$ fails positive approval compatibility, the requirement that a single approval winner can win without any replication. By Theorem~\ref{classification} the same rule has FUPAC. Replication is therefore essential at this endpoint, and FUPAC does not imply the unreplicated property.
+\end{remark}
+
+For six candidates the family has two parameters, and the region is a quadrilateral.
+
+\begin{theorem}\label{six}
+For $m=6$, a scoring rule has split FUPAC if and only if, up to positive affine change, its gaps are $(g_1,g_2,g_3,g_2,g_1)$ with
+\[
+ g_1>0,\quad g_2\ge0,\quad g_3\ge0,\quad g_3\le3g_1+2g_2,\quad 2g_2+g_3\le8g_1 .
+\]
+Equivalently, with $g_1=1$, the point $(g_2,g_3)$ lies in the quadrilateral with corners $(0,0)$, $(0,3)$, $(5/4,11/2)$ and $(4,0)$, whose rules are
+\[
+ (2,1,1,1,1,0),\quad(5,4,4,1,1,0),\quad(40,36,31,9,4,0)/4,\quad(10,9,5,5,1,0).
+\]
+A rational rule has FUPAC if and only if it satisfies the same conditions.
+\end{theorem}
+\begin{proof}
+\emph{Necessity.} Lemma~\ref{symmetry} gives the gap pattern. Translating so that $v_6=0$, the scores are $v=(2g_1+2g_2+g_3,\ g_1+2g_2+g_3,\ g_1+g_2+g_3,\ g_1+g_2,\ g_1,\ 0)$ and $\sum_pv_p=6g_1+6g_2+3g_3$. Two profiles, in each of which every candidate has the same number of approvals so that all must tie at the mean, give the two slanted inequalities.
+
+\emph{Two strong candidates.} On candidates $a,b,c,d,e,f$ take three ballots $\{c,d,e,f\}$ and, for each $i\in\{c,d,e,f\}$, one ballot $\{a,b,i\}$. Everyone has four approvals. In every completion $a$ and $b$ together score at least $3(v_5+v_6)+4(v_2+v_3)=11g_1+12g_2+8g_3$, since they are the last two on the first three ballots and at worst second and third on the others. A common tie requires their total to equal $\tfrac13$ of the profile total $7\sum_pv_p$. Hence $3(11g_1+12g_2+8g_3)\le7(6g_1+6g_2+3g_3)$, that is, $g_3\le3g_1+2g_2$.
+
+\emph{One strong candidate.} On candidates $y$ and five others take four ballots that approve everyone except $y$ and, for each other candidate $i$, one ballot $\{y,i\}$. Everyone has five approvals. In every completion $y$ scores at least $5v_2+4v_6=5(g_1+2g_2+g_3)$, and a tie requires this to be at most the mean total $\tfrac96\sum_pv_p$. Hence $2g_2+g_3\le8g_1$. If $g_1=0$ this forces $g_2=g_3=0$, contradicting $v_1>v_6$; so $g_1>0$.
+
+\emph{Sufficiency.} The rule $(2,1,1,1,1,0)$ is best--worst voting. For each of the other three corner rules the supplementary file gives weights $\alpha$ for the triples $(r,s,x)$ (for the six triples with $R=S$, $\alpha=0$ works because $L_A(R)\le U_A(R)$), and \eqref{cert} is checked for all $71$ triples in exact arithmetic for every labelled ballot, $254{,}016$ inequalities per rule. Every rule in the region is a nonnegative combination of the four corner rules, so by linearity it passes every test \eqref{test}; this is split FUPAC, and for a rational rule Corollary~\ref{interval} turns it into a finite replication.
+\end{proof}
+
+The six-candidate rule $(5,4,3,-3,-4,-5)$ has gaps $(1,1,6,1,1)$ and satisfies all the necessary inequalities of \cite[Lemma~2]{tlz} (for this vector they read $v_{q+1}\ge-q$, with equality at $q=3,4,5$; it lies on the edge $2g_2+g_3=8g_1$), so by Theorem~\ref{rationalfpac} below each approval winner can be elected separately. It violates $g_3\le3g_1+2g_2$, and on the two-strong-candidates profile $a$ and $b$ together score at least $3(-9)+4(7)=1$ while a common tie would give everyone zero. A coalition can thus block a common tie even when every single candidate can win.
+
+\section{One designated winner: the scalar criterion}\label{sec:fpac}
+This section proves that the scalar inequalities of Terzopoulou, Lang and Zwicker are sufficient for electing any one designated approval winner, for split ballots with any real scores and for replicated ballots with rational scores.
+
+The inequalities are
+\begin{equation}
+ (m-1+q)\overline v\le qv_1+(m-1)v_{q+1}
+ \qquad(2\le q\le m-1).\label{scalar}
+\end{equation}
+Terzopoulou, Lang and Zwicker proved them necessary for FPAC and conjectured sufficiency \cite[Lemma~2 and note~9]{tlz}. Their scoring vectors are real, nonincreasing and nonconstant \cite[Sect.~2.1]{tlz}, and their Definition~2 uses whole copies of ballots.
+
+\begin{theorem}\label{rationalfpac}
+For every real scoring vector, \eqref{scalar} is necessary and sufficient for split FPAC. For every scoring vector that is positively affinely equivalent to a rational vector, \eqref{scalar} is necessary and sufficient for FPAC.
+\end{theorem}
+\begin{proof}
+\emph{Necessity} is the argument of \cite[Lemma~2]{tlz}, which applies equally to split completions: take $q$ ballots $\{y\}$ and the $m-1$ cyclic blocks of $q$ consecutive names on a circle formed by the other candidates. Every candidate has $q$ approvals, $y$ scores at most $qv_1+(m-1)v_{q+1}$, and $y$ needs at least the mean.
+
+\emph{Plan of the sufficiency proof.} We fix $y$ at its best position on every ballot, reduce to an inequality for one ballot and one set $R$ of rivals, reduce that inequality to the hardest case, and verify the hardest case by writing $v$ as a combination of $c$-approval vectors and checking four cutoffs.
+
+\emph{Reduction to one ballot.} Fix $y\in W$ and rank $y$ first in its own tier on every ballot $A$; call the resulting score $\sigma_y(A)$. For a nonempty set $R\subseteq C\setminus\{y\}$ of $r$ rivals, the least total score of $R$ on $A$ is still $L_A(R)$, because placing $y$ first in its tier leaves the lowest slots of each tier free. Write $j=|R\cap A|$, $B_r=r^{-1}\sum_{p=m-r+1}^mv_p$ for the mean of the last $r$ scores, and $K_r=v_1-B_r\ge0$. We prove
+\begin{equation}
+ L_A(R)\le r\,\sigma_y(A)+K_r\bigl(j-r\one_{y\in A}\bigr).\label{ballotbound}
+\end{equation}
+Summed over the ballots, the last term becomes $K_r\bigl(\sum_{i\in R}a_i-ra_y\bigr)\le0$, since $y$ is an approval winner. So every rival set can be held to at most $r$ times $y$'s fixed total. Lemma~\ref{box}, applied to the polytope of rival scores with $y$'s positions fixed (its sorting proof applies unchanged, since the available positions inside each tier are fixed), then gives a split completion in which $y$ wins. For rational scores the rational-data argument of Corollary~\ref{interval} turns it into a replication, and positive affine changes preserve all comparisons.
+
+\emph{Easy cases of \eqref{ballotbound}.} Always $L_A(R)\le jv_1+(r-j)B_r$, because the last $r-j$ scores average at most $B_r$. This proves \eqref{ballotbound} when $y\in A$. Suppose $y\notin A$, and put $q=|A|$ and $\bar q=m-q$, so $\sigma_y(A)=v_{q+1}$. If $r\le\bar q$ then $B_r\le v_{q+1}$ and the same estimate suffices. If $\bar q=1$ all rivals are approved, and \eqref{ballotbound} says that the mean of the last $r$ of the scores $v_1,\ldots,v_{m-1}$, plus $B_r$, is at most $v_1+v_m$. Both means increase weakly with $r$, and at $r=m-1$ the claim is $2\overline v\le v_1+v_m$, the case $q=m-1$ of \eqref{scalar}.
+
+\emph{The hardest case.} It remains to treat $r>\bar q\ge2$. Then $q\ge2$, and $j\ge r-\bar q+1>0$ because $y$ is disapproved. Put $\gamma=v_{q+1}$. Subtract $r\gamma$ from $L_A(R)$ and divide by $j$: the result is the mean excess over $\gamma$ of the lowest $j$ approved slots, minus the total shortfall below $\gamma$ of the lowest $r-j$ slots divided by $j$. The first term increases weakly with $j$ and the second decreases weakly, since its nonnegative numerator loses a summand. So the hardest case has $j=\min(r,q)$. If $r<q$ this means $j=r$, all selected rivals approved; the mean of the lowest $r$ approved scores increases with $r$ while $K_r$ decreases, so it suffices to treat $r=q$. We may therefore assume $j=q\le r$.
+
+\emph{Decomposition into $c$-approval vectors.} Write $v$ as a constant vector plus $\sum_{c=1}^{m-1}(v_c-v_{c+1})e^{(c)}$, where $e^{(c)}_p=\one_{p\le c}$. Constants cancel in \eqref{ballotbound}. Let $\eta=r-\bar q$ and $[u]_+=\max(u,0)$. For $e^{(c)}$, let $E_c$ be the left side of \eqref{ballotbound} minus the right side. Counting available slots gives
+\[
+E_c=\begin{cases}
+ [j+c-q]_+-j\min\bigl(1,(m-c)/r\bigr),& c\le q,\\[2pt]
+ -\min(r-j,m-c)-j\min\bigl(1,(m-c)/r\bigr),& c>q ;
+\end{cases}
+\]
+for example, in the first branch $[j+c-q]_+$ counts selected approved slots at or above the cutoff and the second term is $jK_r$ for $e^{(c)}$. The scalar inequalities \eqref{scalar} with $q$ and with $m-1$ say that the nonnegative combinations, with weights $v_c-v_{c+1}$, of the slacks
+\[
+ \Lambda_\ell(c)=\ell+(m-1)\one_{c\ge\ell+1}-(m-1+\ell)c/m\qquad(\ell=q,\ m-1)
+\]
+are nonnegative. We find $\lambda,\mu\ge0$ with
+\begin{equation}
+ E_c+m\lambda\Lambda_q(c)+\frac{m\mu}{m-1}\Lambda_{m-1}(c)\le0\qquad(1\le c\le m-1).\label{dualinequality}
+\end{equation}
+Combining \eqref{dualinequality} with weights $v_c-v_{c+1}$ gives \eqref{ballotbound}. Both branches of $E_c$ are convex in $c$, and the added terms are affine on each branch, so it suffices to check $c=1,q,q+1,m-1$, allowing coincident cutoffs.
+
+\emph{The four cutoffs.} Put $\chi=\one_{q<r}$, recall $j=q$, and let $\zeta=m-1-r\ge0$. Substituting the four cutoffs into \eqref{dualinequality} gives, in order,
+\begin{align}
+ \lambda(m-1)(q-1)+\mu(m-2)&\le q-1,\label{cutone}\\
+ \lambda q(q-1)+\mu(q-\bar q)&\ge q\eta/r,\label{cuttwo}\\
+ \lambda(m-1+q)(\bar q-1)+\mu(\bar q-q-2)&\le r-q(\eta+1)/r,\label{cutthree}\\
+ \lambda(m-1+q)-\mu(m-2)&\le \chi+q/r.\label{cutfour}
+\end{align}
+At $c=q+1$ the bound $r\le m-1$ gives $\min(r-q,\bar q-1)=r-q$, and $\bar q-1<r$ gives $\min(1,(\bar q-1)/r)=(\bar q-1)/r$; together these produce the right-hand side of \eqref{cutthree}. Choose
+\[
+ \mu=\frac{q\bar q\zeta}{rm(\bar q-1)},\qquad \lambda=\frac{q\eta/r-\mu(q-\bar q)}{q(q-1)}.
+\]
+Then \eqref{cutone} and \eqref{cuttwo} hold with equality. If $\lambda<0$, then $q>\bar q$, and we lower $\mu$ to $q\eta/[r(q-\bar q)]$ and set $\lambda=0$. This keeps \eqref{cuttwo} an equality and improves \eqref{cutone}, because after solving \eqref{cuttwo} for $\lambda$ the coefficient of $\mu$ on the left of \eqref{cutone} is $m(\bar q-1)/q>0$; in \eqref{cutthree} and \eqref{cutfour} the left sides are then nonpositive and the right sides nonnegative. Otherwise both multipliers are nonnegative, and for $r>q$ the right side minus the left side of \eqref{cutthree} and of \eqref{cutfour} simplify to
+\[
+ \frac{\zeta\{q^2-q+(\bar q-1)^2+(q-1)(\bar q-1)\zeta\}}{r(q-1)(\bar q-1)}
+ \qquad\text{and}\qquad
+ \frac{q(q\bar q-1)\zeta}{r(q-1)(\bar q-1)} .
+\]
+For $r=q$ the corresponding differences are $(q+\bar q^2-2\bar q)/(q-1)$ and $q(\bar q-1)/(q-1)$. All are nonnegative. This proves \eqref{dualinequality} and hence \eqref{ballotbound}.
+\end{proof}
+
+Once the mean is known, checking \eqref{scalar} takes $m-2$ comparisons. The supplementary script \texttt{verify\_rational\_fpac.py} checks the four-cutoff inequality symbolically for every number of candidates, using the vertices of the associated linear programmes instead of the multipliers $\lambda,\mu$; it relies on the reductions above, which it does not re-derive.
+
+\begin{corollary}\label{interior}
+Suppose $v$ is strictly decreasing and satisfies every inequality in \eqref{scalar} strictly. Then, even for irrational scores, every approval winner can be made the unique winner on a finite replication.
+\end{corollary}
+\begin{proof}
+Rank $y$ first in its tier on every ballot and put $M_R(v)=r\sum_A\sigma_y(A)-\sum_AL_A(R)$ for each nonempty rival set $R$. On the cone of nonincreasing score vectors $M_R$ is linear, and the proof of Theorem~\ref{rationalfpac} gives $M_R\ge0$ for every vector satisfying \eqref{scalar}, including Borda and plurality $(1,0,\ldots,0)$. Let $\omega$ be the sum of these two vectors; we claim $M_R(\omega)>0$ on any given profile. Under Borda, ordering each tier uniformly at random gives every candidate $m/2$ times its approval count plus a common constant, because the mean of the top $q$ Borda scores exceeds that of the bottom $m-q$ by $m/2$ when $0<q<m$, and empty and universal ballots give every candidate the same expected score. If some ballot gives $y$ a tier of size at least two, moving $y$ to the front of its tier everywhere strictly raises $y$ and weakly lowers everyone else, so all margins are strictly positive. Otherwise every ballot is $\{y\}$ or $C\setminus\{y\}$; at least half approve $y$, and plurality gives $y$ a strict lead when the first places on the other ballots are shared equally among the $m-1\ge2$ rivals. In both cases one summand of $\omega$ has all $M_R>0$ and the other all $M_R\ge0$. Choose $\varepsilon>0$ so small that $v-\varepsilon\omega$ is still nonincreasing and satisfies \eqref{scalar}; then $M_R(v-\varepsilon\omega)\ge0$, so $M_R(v)>0$ by linearity. Lemma~\ref{box} with all rival caps lowered slightly gives a split completion with a positive winning margin against every rival. A margin survives a sufficiently close rational approximation of the ranking probabilities, and clearing their denominators gives the replication.
+\end{proof}
+
+\section{Replication versus split ballots for irrational scores}\label{sec:arithmetic}
+This section shows that, for irrational scores, whole copies of ballots can be strictly weaker than split ballots, so that the literal integer-replication reading of the conjecture fails although the split reading holds.
+
+\begin{theorem}\label{arithmetic}
+There is a five-ballot profile on eight candidates and a family of rules $v(t)=P+tQ$, $t\ge0$, with integral $P$ and $Q$, such that \eqref{scalar} holds for every $t$, a designated approval winner can win in a split completion for every $t$, and it can win on a finite replication exactly when $t$ is rational. In particular, \eqref{scalar} does not imply FPAC under the literal reading of \cite[Definition~2]{tlz} with irrational scores.
+\end{theorem}
+\begin{proof}
+On candidates $y,z,a,b,c,d,e,f$ take the ballots
+\[
+ \{y\},\quad \{y\},\quad \{z,a,b,c\},\quad
+ \{z,d,e,f\},\quad \{a,b,c,d,e,f\}.
+\]
+Every candidate has two approvals. Let
+\[
+ P=(14,12,12,12,3,2,1,0),\qquad Q=(39,32,32,32,6,3,0,0),
+\]
+with means $7$ and $18$. For $P$, \eqref{scalar} reads $P_{q+1}\ge7-q$, and for $Q$ it reads $Q_{q+1}\ge18-3q$; both hold for $2\le q\le7$ by inspection, and hence for $v(t)$.
+
+The best positions available to $y$ on the five ballots are $1,1,5,5,7$, giving totals $35$ under $P$ and $90$ under $Q$, exactly five times the respective means. Since $v(t)$ drops strictly just below each of these positions, $y$ can win on $k$ copies only if it takes its best position on every copy and all candidates tie. For irrational $t$, equality of two totals $u+tu'$ with integers $u,u'$ forces equality of both parts, so all candidates would also tie under the integer weights
+\[
+ Z=11Q-32P+32\one=(13,0,0,0,2,1,0,32).
+\]
+The forced positions give $y$ exactly $30k$ points under $Z$. Candidate $z$ must be eighth on each copy of the six-element ballot, since it and $y$ are the two disapproved candidates there and $y$ is seventh; all entries of $Z$ are nonnegative, so $z$ receives at least $32k$. This contradicts the tie. (The weights $Z$ are used only as a linear identity on totals; they are not a scoring rule.)
+
+Conversely, place $y$ in its best positions, put $z$ fourth on each four-element ballot and last on the six-element ballot, and on each ballot $\{y\}$ put $z$ second with probability
+\[
+ \pi(t)=\frac{11+26t}{24+64t}
+\]
+and last otherwise. Complete the other positions compatibly and average over the permutations that exchange the two triples $\{a,b,c\}$ and $\{d,e,f\}$ and permute each triple. These preserve the profile and act transitively on the six remaining candidates. Then $z$ scores $2(12+32t)(1+\pi(t))=35+90t$, equal to $y$'s total, and since the total over all candidates is fixed, the six others reach the same score. This split completion exists for every $t\ge0$; for rational $t$ all its probabilities are rational and it is realised by a finite replication.
+\end{proof}
+
+\begin{corollary}\label{denom}
+For the profile of Theorem~\ref{arithmetic} and rational $t=u/w$ in lowest terms with $w\ge1$, the least number $k$ of copies on which $y$ can win satisfies
+\[
+ \max\{u/11,\ w/52\}\le k\le72(24w+64u).
+\]
+In particular the required replication is unbounded already for $1\le t\le2$.
+\end{corollary}
+\begin{proof}
+On a winning replication let $\Delta_P$ and $\Delta_Q$ be the differences between the totals of $z$ and $y$ under $P$ and $Q$. Since $w\Delta_P+u\Delta_Q=0$ and $\gcd(u,w)=1$, there is an integer $\ell$ with $\Delta_P=-u\ell$ and $\Delta_Q=w\ell$. The comparison under $Z$ gives $(11w+32u)\ell\ge2k$, so $\ell\ge1$. Under $P$, $z$ receives at least $24k$ from its two approvals, while $y$ receives $35k$, so $u\le u\ell=-\Delta_P\le11k$. Under $Q$, $z$ receives at most $142k$ (twice the second score on the singleton ballots, twice the first score on the four-element ballots and zero on the six-element ballot), while $y$ receives $90k$, so $w\le w\ell=\Delta_Q\le52k$. For the upper bound, the denominator of $\pi(t)$ divides $24w+64u$, and the symmetry group used has order $2(3!)^2=72$; replicating by their product clears every denominator in the construction.
+\end{proof}
+
+\section{Discussion and open problems}\label{sec:discussion}
+This section summarises what the results show and what remains open.
+
+Best--worst voting joins Borda voting as a rule that reproduces the approval winner set exactly after replication; it needs up to $m-1$ copies, a sharp bound, against two for Borda \cite[Theorem~3]{tlz}. Every rational mixture of Borda and best--worst scores has the property as well. The classifications for $m\le6$ show that, in these cases, the rules with split FUPAC are described by finitely many linear inequalities in the $\lfloor m/2\rfloor$ gaps left free by reflection symmetry, and that for $m=6$ the region is cut out by two profiles of a simple kind: one in which a single candidate is unavoidably strong and one in which a pair is. For a single designated winner, the scalar inequalities of \cite{tlz} are the whole story whenever ballots may be split, and whenever scores are rational.
+
+Several questions remain open. (i) An explicit description of the cone of rules with FUPAC for every $m$; the recognition test of Theorem~\ref{recognition} decides any given rational rule, and the computations behind Theorem~\ref{six} suggest that a few families of witness profiles may suffice. (ii) The behaviour of irrational rules inside the six-candidate region: the arithmetic argument of Theorem~\ref{classification} uses a one-parameter family, and the two-parameter case at $m=6$ is not settled here. (iii) The least replication needed by the other rules with FUPAC, for which Corollary~\ref{denom} suggests that arithmetic can force large values. (iv) Whether the rules of Theorems~\ref{classification} and~\ref{six} can, like Borda and best--worst voting, always make the winners exactly the approval winners. Finally, all results concern the existence of sincere completions. They say nothing about which completions voters would actually submit; a probabilistic counterpart, as suggested in \cite[Sect.~4]{tlz}, is a separate question.
+
+\section{Computational checks}\label{sec:checks}
+This section lists the scripts that accompany the paper and what each one checks. All use exact integer or rational arithmetic and stop with an error on any failure, also when Python runs with assertions disabled.
+
+{\sloppy\begin{itemize}[nosep,leftmargin=*]
+\item \texttt{code/verify\_endpoints.py} (standard library only) reads the certificate file \texttt{data/endpoint\_certificates.json} and checks \eqref{cert} for every labelled ballot and every pair of nonempty sets $R,S$, with $L_A$ and $U_A$ computed by enumerating all compatible rankings rather than from the closed forms of Section~\ref{sec:interval}: $3{,}600$ inequalities for $(6,5,1,0)$, $30{,}752$ for $(8,7,4,1,0)$ and $254{,}016$ for each of the three six-candidate corner rules of Theorem~\ref{six}. It also checks, by the same enumeration, the two six-candidate witness profiles of Theorem~\ref{six} and the score budgets and auxiliary scores in the proof of Theorem~\ref{arithmetic}.
+\item \texttt{code/verify\_rational\_fpac.py} (SymPy) checks the four-cutoff inequality of Theorem~\ref{rationalfpac} for every number of candidates: $18$ signed vertex cases each for $r=q$ and $r>q$.
+\item \texttt{code/check\_best\_worst.py} (standard library only) enumerates all best--worst completions of all one- and two-voter profiles for $m=3,4,5$ ($44$, $152$ and $560$ profiles) and confirms that the least replication with exactly the approval winners winning never exceeds $m-1$ and reaches $m-1$.
+\end{itemize}\par}
+The certificates were found with a floating-point linear programming solver and then rounded to small rational numbers; only the exact checks above are part of the proofs. The scripts were run with Python~3.12 and~3.14 and SymPy~1.14.0 (any Python~3.10 or later should work). The certificate file has SHA-256 digest \texttt{06af0224c550e93d3be95437f35994cf} \texttt{c23c9582197be4bdc8be99fa92bc4070}, which \texttt{verify\_endpoints.py} prints.
+
+\paragraph{AI use statement.} This paper was prepared with the assistance of AI systems, which were used to search for proofs and counterexamples, to write and run the verification scripts, and to draft and revise the text. The results were checked by internal AI-assisted review and by the exact computations above. The paper has not been refereed.
+
+\paragraph{Data availability.} The scripts and certificate file described in Section~\ref{sec:checks} are distributed with this paper.
+
+\small
+\begin{thebibliography}{9}\setlength{\itemsep}{1pt}
+\bibitem{br} Baumeister, D., \& Rothe, J. (2012). Taking the final step to a full dichotomy of the possible winner problem in pure scoring rules. \emph{Information Processing Letters, 112}(5), 186--190. \url{https://doi.org/10.1016/j.ipl.2011.11.016}.
+\bibitem{edmonds} Edmonds, J. (2003). Submodular functions, matroids, and certain polyhedra. In \emph{Combinatorial Optimization --- Eureka, You Shrink!} (Lecture Notes in Computer Science, Vol.~2570, pp.~11--26). Springer. \url{https://doi.org/10.1007/3-540-36478-1_2}. (First published 1970.)
+\bibitem{kenig} Kenig, B. (2018). The complexity of the possible winner problem over partitioned preferences. arXiv:1802.09001. \url{https://arxiv.org/abs/1802.09001}.
+\bibitem{schrijver} Schrijver, A. (2003). \emph{Combinatorial Optimization: Polyhedra and Efficiency}, Vol.~B, Chapter~44. Springer.
+\bibitem{tlz} Terzopoulou, Z., Lang, J., \& Zwicker, W. S. (2026). Approval compatible voting rules. \emph{Social Choice and Welfare, 66}(1), 1--26. \url{https://doi.org/10.1007/s00355-025-01588-9}.
+\end{thebibliography}
+\end{document}
